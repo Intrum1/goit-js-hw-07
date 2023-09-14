@@ -24,18 +24,21 @@ function handleClick(event) {
 
   const modal = basicLightbox.create(
     `<img src="${event.target.dataset.source}" alt="${event.target.alt}" />`,
+    {
+      onShow: () => window.addEventListener("keydown", closeModal),
+      onClose: () => window.removeEventListener("keydown", closeModal),
+    },
   ); // создание экземпляра для модального окна через метод create библиотеки basicLightbox
 
   modal.show(); // показать модальное окно
 
-  const closeModal = ({ code }) => {
-    if (code === "Escape") { // проверяем что мы нажали на клавишу ескейп
+  function closeModal({ code }) {
+    if (code === "Escape") {
+      // проверяем что мы нажали на клавишу ескейп
       modal.close(); // азкрываем модальное окно
-      window.removeEventListener("keydown", closeModal) // после закрытия модального окна нам не нужно отслеживать нажатие на эскейп, потому что даже если мы нажмем нам нечего будет закрывать, поэтому чтобы не мучать браузер лишними оброботчиками, мы снимаем оброботчик на закрытие
+      // window.removeEventListener("keydown", closeModal) // после закрытия модального окна нам не нужно отслеживать нажатие на эскейп, потому что даже если мы нажмем нам нечего будет закрывать, поэтому чтобы не мучать браузер лишними оброботчиками, мы снимаем оброботчик на закрытие
     }
-  };
-
-  window.addEventListener("keydown", closeModal); // когда модальное окно открылось - доабавляем обработчик на закрытие
+  }
 }
 
 function createMarkup(galleryItems) {
